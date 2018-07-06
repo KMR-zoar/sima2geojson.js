@@ -87,6 +87,12 @@ fs.readFile(targetSIMA,(err, data) => {
     process.exit(1);
   }
 
+  /*
+  旧SIMAデータ(測量データ共通フォーマット(CSV版))では
+  ファイル形式: 1行1レコードの MS-DOS テキストファイル
+  漢字コード: シフト JIS コード
+  と定められているので文字コードを ShiftJIS、改行を CRLF として処理をする
+  */
   const buf = new Buffer(data, 'binary');
   const simaObj = iconv.decode(buf, "Shift_JIS");
 
