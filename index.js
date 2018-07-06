@@ -222,9 +222,7 @@ fs.readFile(targetSIMA, (err, data) => {
     測量座標系とGIS座標系ではXとYの取り扱いが逆なので注意
     測量座標系 → 南北がX、東西がY
     GIS座標系 → 南北がY、東西がX
-    */ translate(
-      [parseFloat(splitedLine[4]), parseFloat(splitedLine[3])],
-      epsg
-    );
+    */
+    translate([parseFloat(splitedLine[4]), parseFloat(splitedLine[3])], epsg);
   });
 });
