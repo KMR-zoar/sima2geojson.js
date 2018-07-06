@@ -1,0 +1,20 @@
+{
+  "name": "sima2geojson",
+  "version": "0.0.0",
+  "description": "Convert old SIMA file to GeoJSON file.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hiroyuki Kimura",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "sima2geojson": "index.js"
+  },
+  "dependencies": {
+    "commander": "^2.16.0",
+    "iconv-lite": "^0.4.23",
+    "proj4": "^2.4.4"
+  }
+}
