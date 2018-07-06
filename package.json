@@ -4,7 +4,7 @@
   "description": "Convert old SIMA file to GeoJSON file.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Hiroyuki Kimura",
   "license": "MIT",
