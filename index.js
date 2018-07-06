@@ -191,8 +191,7 @@ if (!((epsg >= 2443 && epsg <= 2461) || (epsg >= 6669 && epsg <= 6687))) {
 //座標値の変換処理関数
 const translate = (xy, epsg) => {
   const epsgStr = 'EPSG:' + epsg;
-  console.log(xy);
-  console.log(proj4(epsgStr, 'EPSG:4326', xy));
+  return proj4(epsgStr, 'EPSG:4326', xy);
 };
 
 fs.readFile(targetSIMA, (err, data) => {
@@ -216,6 +215,11 @@ fs.readFile(targetSIMA, (err, data) => {
     return item.match('^A01');
   });
 
+  const pointGeoJSON = {
+    type: 'FeatureCollection',
+    features: []
+  };
+
   pointLine.forEach(line => {
     const splitedLine = line.split(',');
     /*
@@ -223,6 +227,34 @@ fs.readFile(targetSIMA, (err, data) => {
     測量座標系 → 南北がX、東西がY
     GIS座標系 → 南北がY、東西がX
     */
-    translate([parseFloat(splitedLine[4]), parseFloat(splitedLine[3])], epsg);
+    const geometry = translate(
+      [parseFloat(splitedLine[4]), parseFloat(splitedLine[3])],
+      epsg
+    );
+
+    const pointObject = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Point',
+        coordinates: []
+      }
+    };
+
+    pointObject.properties.name = splitedLine[2];
+    pointObject.properties.id = splitedLine[1];
+    pointObject.properties.elevation = splitedLine[5];
+
+    pointObject.geometry.coordinates = geometry;
+
+    pointGeoJSON.features.push(pointObject);
+  });
+
+  const pointGeoJSONFileName = targetSIMA + '.point.geojson';
+
+  fs.writeFile(pointGeoJSONFileName, JSON.stringify(pointGeoJSON), err => {
+    if (err) {
+      console.error(err);
+    }
   });
 });
