@@ -73,22 +73,22 @@ fs.readFile(targetSIMA, (err, data) => {
       epsg
     );
 
-    const pointObject = {
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'Point',
-        coordinates: []
-      }
+    const properties = {
+      id: splitedLine[1],
+      name: splitedLine[2],
+      x: splitedLine[3],
+      y: splitedLine[4],
+      ele: splitedLine[5]
     };
 
-    pointObject.properties.name = splitedLine[2];
-    pointObject.properties.id = splitedLine[1];
-    pointObject.properties.x = splitedLine[3];
-    pointObject.properties.y = splitedLine[4];
-    pointObject.properties.elevation = splitedLine[5];
-
-    pointObject.geometry.coordinates = geometry;
+    const pointObject = {
+      type: 'Feature',
+      properties: properties,
+      geometry: {
+        type: 'Point',
+        coordinates: geometry
+      }
+    };
 
     pointGeoJSON.features.push(pointObject);
   });
