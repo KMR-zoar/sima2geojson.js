@@ -6,7 +6,6 @@ const fs = require('fs')
 const iconv = require('iconv-lite')
 const program = require('commander')
 const translate = require('./lib/pointTranslate')
-const createPntGeoJSON = require('./lib/createPointGeoJSON')
 
 program
   .version('0.0.0')
@@ -62,6 +61,8 @@ fs.readFile(targetSIMA, (err, data) => {
     features: []
   }
 
+  let pointArray = {}
+
   pointLine.forEach(line => {
     const splitedLine = line.split(',')
     /*
@@ -92,7 +93,11 @@ fs.readFile(targetSIMA, (err, data) => {
     }
 
     pointGeoJSON.features.push(pointObject)
+
+    pointArray[splitedLine[1]] = geometry
   })
+
+  console.log(pointArray)
 
   const pointGeoJSONFileName = targetSIMA + '.point.geojson'
 
