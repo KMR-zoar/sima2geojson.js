@@ -6,6 +6,7 @@ const fs = require('fs')
 const iconv = require('iconv-lite')
 const program = require('commander')
 const createPointObject = require('./lib/createPointObject')
+const createPointGeoJSON = require('./lib/createPointGeoJSON')
 
 program
   .version('0.0.0')
@@ -58,4 +59,14 @@ const simasplitted = simaObj.split('\r\n')
 
 const pointObject = createPointObject(simasplitted, epsg)
 
+/*
+点情報のみを GeoJSON に書き出す
+*/
+const pointGeoJSON = createPointGeoJSON(pointObject, simasplitted)
+const pointGeoJSONFilename = targetSIMA + '.point.geojson'
 
+fs.writeFile(pointGeoJSONFilename, pointGeoJSON, err => {
+  if (err) {
+    console.error(err)
+  }
+})
