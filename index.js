@@ -5,7 +5,7 @@
 const fs = require('fs')
 const iconv = require('iconv-lite')
 const program = require('commander')
-const translate = require('./lib/pointTranslate')
+const createPointObject = require('./lib/createPointObject')
 
 program
   .version('0.0.0')
@@ -35,75 +35,27 @@ if (!((epsg >= 2443 && epsg <= 2461) || (epsg >= 6669 && epsg <= 6687))) {
   process.exit(1)
 }
 
-fs.readFile(targetSIMA, (err, data) => {
-  if (err) {
-    console.error(err)
-    process.exit(1)
-  }
+let data = Object
 
-  /*
-  旧SIMAデータ(測量データ共通フォーマット(CSV版))では
-  ファイル形式: 1行1レコードの MS-DOS テキストファイル
-  漢字コード: シフト JIS コード
-  と定められているので文字コードを ShiftJIS、改行を CRLF として処理をする
-  */
-  const buf = new Buffer(data, 'binary')
-  const simaObj = iconv.decode(buf, 'Shift_JIS')
+try {
+  data = fs.readFileSync(targetSIMA)
+} catch (error) {
+  console.error(error)
+  process.exit(1)
+}
 
-  const simasplitted = simaObj.split('\r\n')
+/*
+旧SIMAデータ(測量データ共通フォーマット(CSV版))では
+ファイル形式: 1行1レコードの MS-DOS テキストファイル
+漢字コード: シフト JIS コード
+と定められているので文字コードを ShiftJIS、改行を CRLF として処理をする
+*/
 
-  const pointLine = simasplitted.filter(item => {
-    return item.match('^A01')
-  })
+const buf = new Buffer(data, 'binary')
+const simaObj = iconv.decode(buf, 'Shift_JIS')
 
-  const pointGeoJSON = {
-    type: 'FeatureCollection',
-    features: []
-  }
+const simasplitted = simaObj.split('\r\n')
 
-  let pointArray = {}
+const pointObject = createPointObject(simasplitted, epsg)
 
-  pointLine.forEach(line => {
-    const splitedLine = line.split(',')
-    /*
-    測量座標系とGIS座標系ではXとYの取り扱いが逆なので注意
-    測量座標系 → 南北がX、東西がY
-    GIS座標系 → 南北がY、東西がX
-    */
-    const geometry = translate(
-      [parseFloat(splitedLine[4]), parseFloat(splitedLine[3])],
-      epsg
-    )
 
-    const properties = {
-      id: splitedLine[1],
-      name: splitedLine[2],
-      x: splitedLine[3],
-      y: splitedLine[4],
-      ele: splitedLine[5]
-    }
-
-    const pointObject = {
-      type: 'Feature',
-      properties: properties,
-      geometry: {
-        type: 'Point',
-        coordinates: geometry
-      }
-    }
-
-    pointGeoJSON.features.push(pointObject)
-
-    pointArray[splitedLine[1]] = geometry
-  })
-
-  console.log(pointArray)
-
-  const pointGeoJSONFileName = targetSIMA + '.point.geojson'
-
-  fs.writeFile(pointGeoJSONFileName, JSON.stringify(pointGeoJSON), err => {
-    if (err) {
-      console.error(err)
-    }
-  })
-})
