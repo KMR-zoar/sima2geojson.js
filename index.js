@@ -7,6 +7,7 @@ const iconv = require('iconv-lite')
 const program = require('commander')
 const createPointObject = require('./lib/createPointObject')
 const createPointGeoJSON = require('./lib/createPointGeoJSON')
+const createPolygonGeoJSON = require('./lib/createPolygonGeoJSON')
 
 program
   .version('0.0.0')
@@ -66,6 +67,19 @@ const pointGeoJSON = createPointGeoJSON(pointObject, simasplitted)
 const pointGeoJSONFilename = targetSIMA + '.point.geojson'
 
 fs.writeFile(pointGeoJSONFilename, pointGeoJSON, err => {
+  if (err) {
+    console.error(err)
+  }
+})
+
+/*
+面情報のみを GeoJSON に書き出す
+*/
+
+const polygonGeoJSON = createPolygonGeoJSON(pointObject, simaObj)
+const polygonGeoJSONFilename = targetSIMA + '.polygon.geojson'
+
+fs.writeFile(polygonGeoJSONFilename, polygonGeoJSON, err => {
   if (err) {
     console.error(err)
   }
