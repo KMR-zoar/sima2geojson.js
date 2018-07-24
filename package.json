@@ -1,6 +1,6 @@
 {
   "name": "sima2geojson",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Convert old SIMA file to GeoJSON file.",
   "keywords": [
     "sima",
