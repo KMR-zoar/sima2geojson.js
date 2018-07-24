@@ -8,9 +8,11 @@ const program = require('commander')
 const createPointObject = require('./lib/createPointObject')
 const createPointGeoJSON = require('./lib/createPointGeoJSON')
 const createPolygonGeoJSON = require('./lib/createPolygonGeoJSON')
+const packageInfo = require('./package.json')
 
 program
-  .version('0.0.0')
+  .name(packageInfo.name)
+  .version(packageInfo.version)
   .usage('-S <file...> -E <Code of the EPSG>')
   .option('-S, --sima <s>', 'Source SIMA file')
   .option('-E --epsg <n>', 'Source EPSG code. Search from http://epsg.io/')

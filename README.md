@@ -7,7 +7,7 @@ SIMA データが持つ座標は日本の平面直角座標系 I ～ XIX まで�
 
 ## Usage
 
-npm から取得してください(予定)
+npm から取得してください
 
 ```
 # npm i -g sima2geojson
