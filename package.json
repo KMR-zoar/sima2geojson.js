@@ -16,11 +16,11 @@
     "sima2geojson": "index.js"
   },
   "dependencies": {
-    "commander": "^2.16.0",
-    "iconv-lite": "^0.4.23",
-    "proj4": "^2.4.4"
+    "commander": "^2.20.3",
+    "iconv-lite": "^0.4.24",
+    "proj4": "^2.6.0"
   },
   "devDependencies": {
-    "assert": "^1.4.1"
+    "assert": "^1.5.0"
   }
 }
