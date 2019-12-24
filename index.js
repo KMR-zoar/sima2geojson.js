@@ -79,10 +79,13 @@ fs.writeFile(pointGeoJSONFilename, pointGeoJSON, err => {
 */
 
 const polygonGeoJSON = createPolygonGeoJSON(pointObject, simaObj)
-const polygonGeoJSONFilename = targetSIMA + '.polygon.geojson'
 
-fs.writeFile(polygonGeoJSONFilename, polygonGeoJSON, err => {
-  if (err) {
-    console.error(err)
-  }
-})
+if (polygonGeoJSON) {
+  const polygonGeoJSONFilename = targetSIMA + '.polygon.geojson'
+
+  fs.writeFile(polygonGeoJSONFilename, polygonGeoJSON, err => {
+    if (err) {
+      console.error(err)
+    }
+  })
+}
