@@ -55,7 +55,7 @@ try {
 と定められているので文字コードを ShiftJIS、改行を CRLF として処理をする
 */
 
-const buf = new Buffer(data, 'binary')
+const buf = Buffer.from(data, 'binary')
 const simaObj = iconv.decode(buf, 'Shift_JIS')
 
 const simasplitted = simaObj.split('\r\n')
